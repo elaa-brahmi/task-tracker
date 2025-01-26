@@ -3,7 +3,6 @@ package com.example.task_tracker.user;
 import com.example.task_tracker.task.Task;
 import jakarta.persistence.*;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -18,10 +17,11 @@ import java.util.Collection;
 import java.util.List;
 @Getter
 @Setter
-@SuperBuilder
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Data
 @Table(name="user")
 @EntityListeners(AuditingEntityListener.class)
 public class User implements UserDetails, Principal {
