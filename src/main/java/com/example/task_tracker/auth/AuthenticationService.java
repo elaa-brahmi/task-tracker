@@ -3,8 +3,17 @@ package com.example.task_tracker.auth;
 import com.example.task_tracker.email.EmailService;
 import com.example.task_tracker.email.EmailTemplateName;
 import com.example.task_tracker.security.JwtService;
-import com.example.task_tracker.user.*;
+import com.example.task_tracker.user.User;
+import com.example.task_tracker.user.Token;
+import com.example.task_tracker.user.UserRepository;
+import com.example.task_tracker.user.TokenRepository;
+import com.example.task_tracker.user.Role;
+
+
+
+
 import jakarta.mail.MessagingException;
+import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -17,6 +26,7 @@ import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
+@Builder
 public class AuthenticationService {
 
     private final UserRepository userRepository;
@@ -32,8 +42,8 @@ public class AuthenticationService {
     public void register(RegistrationRequest request) throws MessagingException {
 
         var user = User.builder()
-                .firstName(request.getFirstname())
-                .lastName(request.getLastname())
+                .firstName(request.getFirstName())
+                .lastName(request.getLastName())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .accountLocked(false)
