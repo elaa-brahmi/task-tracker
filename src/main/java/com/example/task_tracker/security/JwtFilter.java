@@ -11,12 +11,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
-@Service
+@Component
 @RequiredArgsConstructor // whenever we have private final instances
 public class JwtFilter extends OncePerRequestFilter {
     private final UserDetailsService userDetailsService;
@@ -41,12 +41,14 @@ public class JwtFilter extends OncePerRequestFilter {
                 jwt = authHeader.substring(7);
                 userEmail=jwtService.extractUsername(jwt);
                 if(userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                    // means that the user is not authenticated
-                    UserDetails userDetails=userDetailsService.loadUserByUsername(userEmail);
+                    // means that the user is not authenticated yet
+                    UserDetails userDetails=this.userDetailsService.loadUserByUsername(userEmail);
                     if(jwtService.isTokenValid(jwt, userDetails)) {
                         //validate token against my token
                         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                                userDetails, null, userDetails.getAuthorities()
+                                userDetails,
+                                null,
+                                userDetails.getAuthorities()
                         );
                         authToken.setDetails(
                                 new WebAuthenticationDetailsSource().buildDetails(request)
