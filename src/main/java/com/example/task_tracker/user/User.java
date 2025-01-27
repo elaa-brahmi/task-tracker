@@ -3,6 +3,7 @@ package com.example.task_tracker.user;
 import com.example.task_tracker.task.Task;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -17,7 +18,7 @@ import java.util.Collection;
 import java.util.List;
 @Getter
 @Setter
-@Builder
+@SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -41,7 +42,7 @@ public class User implements UserDetails, Principal {
     // mappedBy should have the same attribute name in class Task
     // FetchType.EAGER when we fetch a use we must fetch the tasks as well
     @OneToMany(mappedBy="assignee", cascade=CascadeType.ALL, orphanRemoval=true,fetch=FetchType.EAGER)
-    private List<Task> tasks=new ArrayList();
+    private List<Task> tasks=new ArrayList<>();
 // we can have private List<Role> roles;
     //but in my application a user has only one role which user
 
