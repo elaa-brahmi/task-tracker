@@ -29,7 +29,17 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(req->
                         req.requestMatchers(
-                                "/auth/**"
+                                "/auth/**",
+                                        "/v2/api-docs",
+                                        "/v3/api-docs",
+                                        "/v3/api-docs/**",
+                                        "/swagger-resources",
+                                        "/swagger-resources/**",
+                                        "/configuration/ui",
+                                        "/configuration/security",
+                                        "/swagger-ui/**",
+                                        "/webjars/**",
+                                        "/swagger-ui.html"
                         )// allow these requests
                 .permitAll()
                                 .anyRequest()
@@ -37,7 +47,7 @@ public class SecurityConfig {
                 )
                 .sessionManagement(session-> session.sessionCreationPolicy(STATELESS))
                 .authenticationProvider(authenticationProvider)
-                // CREATE our custom filter and exceute it  before proceeding to the usernamepasswordFilter to check if the user exists ..or all the flow
+                // CREATE our custom filter and exceute it  before proceeding to the UsernamePasswordAuthenticationFilter to check if the user exists ..or all the flow
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
 return http.build();
