@@ -19,13 +19,21 @@ public class JwtService {
     private String secretKey="404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970";
 
     private long jwtExpiration=86400000;
+    public String extractUsername(String token) {
+        return extractClaim(token, Claims::getSubject);
+    }
+    public <T> T extractClaim(String token, Function<Claims,T> claimResolver){
+        final Claims claims=extractAllClaims(token);
+        return claimResolver.apply(claims);
+    }
 
     public String generateToken(UserDetails userDetails) {
         return generateToken(new HashMap<>(),userDetails);
     }
 
-    private String generateToken(HashMap<String,Object> claims, UserDetails userDetails) {
-        return buildToken(claims,userDetails,jwtExpiration);
+    private String generateToken(HashMap<String,Object> extraClaims,
+                                 UserDetails userDetails) {
+        return buildToken(extraClaims,userDetails,jwtExpiration);
     }
 
     private String buildToken(HashMap<String, Object> extraClaims,
@@ -53,10 +61,10 @@ public class JwtService {
     }
 
     private boolean isTokenExpired(String token) {
-        return extarctExpiration(token).before(new Date());
+        return extractExpiration(token).before(new Date());
     }
 
-    private Date extarctExpiration(String token) {
+    private Date extractExpiration(String token) {
         return extractClaim(token,Claims::getExpiration);
     }
 
@@ -75,12 +83,7 @@ public class JwtService {
                 .parseClaimsJws(token)
                 .getBody();
     }
-    public <T> T extractClaim(String token, Function<Claims,T> claimResolver){
-        final Claims claims=extractAllClaims(token);
-        return claimResolver.apply(claims);
-    }
 
-    public String extractUsername(String token) {
-        return extractClaim(token, Claims::getSubject);
-    }
+
+
 }
