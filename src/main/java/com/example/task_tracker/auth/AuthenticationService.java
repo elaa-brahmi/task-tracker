@@ -57,6 +57,29 @@ public class AuthenticationService {
                 "Account activation"
         );
     }
+    private String generateAndSaveActivationToken(User user) {
+        // Generate a token
+        String generatedToken = generateActivationCode(6);
+        var token = Token.builder()
+                .token(generatedToken)
+                .createdAt(LocalDateTime.now())
+                .expiresAt(LocalDateTime.now().plusMinutes( 15))
+                .user(user)
+                .build();
+        tokenRepository.save(token);
+        return generatedToken;
+    }
+
+    private String generateActivationCode(int length) {
+        String characters = "0123456789";
+        StringBuilder codeBuilder = new StringBuilder();
+        SecureRandom secureRandom = new SecureRandom();
+        for (int i = 0; i < length; i++) {
+            int randomIndex = secureRandom.nextInt(characters.length());
+            codeBuilder.append(characters.charAt(randomIndex));
+        }
+        return codeBuilder.toString();
+    }
 
 
 
@@ -79,29 +102,7 @@ public class AuthenticationService {
         tokenRepository.save(savedToken);
     }
 
-    private String generateAndSaveActivationToken(User user) {
-        // Generate a token
-        String generatedToken = generateActivationCode(6);
-        var token = Token.builder()
-                .token(generatedToken)
-                .createdAt(LocalDateTime.now())
-                .expiresAt(LocalDateTime.now().plusMinutes(15))
-                .user(user)
-                .build();
-        tokenRepository.save(token);
-        return generatedToken;
-    }
 
-    private String generateActivationCode(int length) {
-        String characters = "0123456789";
-        StringBuilder codeBuilder = new StringBuilder();
-        SecureRandom secureRandom = new SecureRandom();
-        for (int i = 0; i < length; i++) {
-            int randomIndex = secureRandom.nextInt(characters.length());
-            codeBuilder.append(characters.charAt(randomIndex));
-        }
-        return codeBuilder.toString();
-    }
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
         var auth=authenticationManager.authenticate(

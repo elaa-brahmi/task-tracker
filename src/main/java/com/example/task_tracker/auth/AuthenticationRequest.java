@@ -12,7 +12,6 @@ import lombok.Setter;
 @Setter
 @Builder
 public class AuthenticationRequest {
-    //this is the object for our authentication request
     @Email(message = "Email is not well formatted")
     @NotEmpty(message = "Email is mandatory")
     @NotNull(message = "Email is mandatory")

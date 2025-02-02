@@ -9,6 +9,7 @@ public enum BusinessErrorCodes {
     NO_CODE(0,NOT_IMPLEMENTED,"no code"),
     INCORRECT_CURRENT_PASSWORD(300,BAD_REQUEST,"incorrect current password"),
     NEW_PASSWORD_DOES_NOT_MATCH(301,BAD_REQUEST,"the new password does not match"),
+    Task_Not_Found(401,NOT_FOUND,"task not found"),
 
     ACCOUNT_LOCKED(302,FORBIDDEN,"User account is locked"),
     ACCOUNT_DISABLED(303,FORBIDDEN,"User account is disabled"),

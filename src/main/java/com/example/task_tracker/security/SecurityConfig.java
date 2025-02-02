@@ -17,7 +17,6 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-// create a constructor with all the final fields
 @EnableMethodSecurity(securedEnabled = true )
 public class SecurityConfig {
     private final AuthenticationProvider authenticationProvider;
@@ -39,7 +38,8 @@ public class SecurityConfig {
                                         "/configuration/security",
                                         "/swagger-ui/**",
                                         "/webjars/**",
-                                        "/swagger-ui.html"
+                                        "/swagger-ui.html",
+                                         "/ws/**"
                         )// allow these requests
                 .permitAll()
                                 .anyRequest()

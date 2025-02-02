@@ -1,8 +1,12 @@
 package com.example.task_tracker.user;
 
+import com.example.task_tracker.notification.Notification;
 import com.example.task_tracker.task.Task;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -14,8 +18,6 @@ import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
-@Getter
-@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -37,22 +39,19 @@ public class User implements UserDetails , Principal {
     private boolean accountLocked;
     @Enumerated(EnumType.STRING)
     private Role role;
-    // mappedBy should have the same attribute name in class Task
-    // FetchType.EAGER when we fetch a use we must fetch the tasks as well
-    @OneToMany(mappedBy="assignee", cascade=CascadeType.ALL, orphanRemoval=true,fetch=FetchType.EAGER)
+    @OneToMany(mappedBy="assignee", cascade=CascadeType.ALL, orphanRemoval=true,fetch=FetchType.LAZY)
     private List<Task> tasks;
-// we can have private List<Role> roles;
+    // we can have private List<Role> roles;
     //but in my application a user has only one role which user
-
+    @OneToMany(mappedBy="assignee", cascade=CascadeType.ALL, orphanRemoval=true,fetch=FetchType.LAZY)
+    private List<Notification> notifs;
     @CreatedDate
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdDate;
     @LastModifiedDate
-    @Column(insertable = false) // when we create a record we don't want to initialize the value of this attribute
+    @Column(insertable = false)
     private LocalDateTime lastModifiedDate;
-
-
-    @Override
+   @Override
     public String getName() {
         return email;
     }

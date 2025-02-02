@@ -14,11 +14,10 @@ import java.util.Set;
 
 import static com.example.task_tracker.exception.BusinessErrorCodes.*;
 import static org.ietf.jgss.GSSException.UNAUTHORIZED;
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
+import static org.springframework.http.HttpStatus.*;
 
 @RestControllerAdvice
-public class GlobalExceptionHnadler {
+public class GlobalExceptionHandler {
     @ExceptionHandler(LockedException.class)
     public ResponseEntity<ExceptionResponse> handleException(LockedException exp){
         return ResponseEntity
@@ -32,6 +31,25 @@ public class GlobalExceptionHnadler {
                 );
 
     }
+
+    @ExceptionHandler(TaskNotFound.class)
+    public ResponseEntity<ExceptionResponse> handleException(TaskNotFound exp){
+        return ResponseEntity
+                .status(NOT_FOUND)
+                .body(
+                        ExceptionResponse.builder()
+                                .businessErrorCode(Task_Not_Found.getCode())
+                                .businessErrorDescription(Task_Not_Found.getDescription())
+                                .error(exp.getMessage())
+                                .build()
+                );
+
+    }
+
+
+
+
+
 
     @ExceptionHandler(DisabledException.class)
     public ResponseEntity<ExceptionResponse> handleException(DisabledException exp){
@@ -99,6 +117,18 @@ public class GlobalExceptionHnadler {
                         ExceptionResponse.builder()
 
                                 .businessErrorDescription("Internal Server Error")
+                                .error(exp.getMessage())
+                                .build()
+                );
+
+    }
+
+    @ExceptionHandler(UnauthorizedAccessException.class)
+    public ResponseEntity<ExceptionResponse> handleException(UnauthorizedAccessException exp){
+        return ResponseEntity
+                .status(INTERNAL_SERVER_ERROR)
+                .body(
+                        ExceptionResponse.builder()
                                 .error(exp.getMessage())
                                 .build()
                 );
