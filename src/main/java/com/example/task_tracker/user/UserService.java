@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
+    private final UserMapper userMapper;
 
     public void updateUser(Authentication connectedUser,UserRequest userRequest) {
         User currentUser=((User) connectedUser.getPrincipal());
@@ -18,4 +19,10 @@ public class UserService {
         userRepository.save(currentUser);
     }
 
+    public UserResponse getUserById(Authentication connectedUser) {
+        User currentUser=((User) connectedUser.getPrincipal());
+        return userMapper.toUserResponse(currentUser);
+
+
+    }
 }

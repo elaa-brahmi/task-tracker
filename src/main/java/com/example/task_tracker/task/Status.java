@@ -4,4 +4,5 @@ public enum Status {
     FINISHED,
     IN_PROGRESS,
     PENDING;
+
 }

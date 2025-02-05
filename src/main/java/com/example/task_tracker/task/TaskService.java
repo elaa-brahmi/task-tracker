@@ -16,7 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
-
+//import org.hibernate.session.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -42,7 +42,7 @@ public class TaskService {
     public Integer save(TaskRequest request, Authentication connectedUser) {
         User user=((User) connectedUser.getPrincipal());
         Task task=taskMapper.toTask(request);
-        task.setAssignee(user);
+        task.setIdassignee(user.getId());
         task.setCreatedAt(LocalDateTime.now());
 
         return  taskRepository.save(task).getId();
@@ -77,7 +77,7 @@ public class TaskService {
     public PageResponse<TaskResponse> findTasksByStatus(int page, int size, Authentication connectedUser, String status) {
         User user=((User) connectedUser.getPrincipal());
         Pageable pageable= PageRequest.of(page, size, Sort.by("createdAt").descending());
-        Page<Task> tasks=taskRepository.findTasksByStatus(user.getId(),pageable,Status.valueOf(status));
+        Page<Task> tasks=taskRepository.findTasksByStatus(user.getId(),pageable,Status.valueOf(status.toUpperCase()));
         if(!tasks.hasContent()){
             throw new TaskNotFound("tasks with status "+status+" not found");
         }
@@ -100,7 +100,7 @@ public class TaskService {
     public PageResponse<TaskResponse> findTasksByPriority(int page, int size, Authentication connectedUser, String priority) {
         User user=((User) connectedUser.getPrincipal());
         Pageable pageable= PageRequest.of(page, size, Sort.by("createdAt").descending());
-        Page<Task> tasks=taskRepository.findTasksByPriority(user.getId(),pageable,Importance.valueOf(priority));
+        Page<Task> tasks=taskRepository.findTasksByPriority(user.getId(),pageable,Importance.valueOf(priority.toUpperCase()));
         if(!tasks.hasContent()){
             throw new TaskNotFound("tasks with priority "+priority+" not found");
         }
@@ -156,20 +156,18 @@ public class TaskService {
         User user=((User) connectedUser.getPrincipal());
         Task task=taskRepository.findById(idTask).get();
         taskRepository.delete(task);
-
     }
+    public void updateStatusOfATask(Integer idTask, TaskStatusRequest statusRequest, Authentication connectedUser) throws UnauthorizedAccessException {
 
-    public void updateStatusOfATask(Integer idTask, String statusRequest, Authentication connectedUser) throws UnauthorizedAccessException {
-        User user=((User) connectedUser.getPrincipal());
-        Task task=taskRepository.findById(idTask).orElseThrow(()->new TaskNotFound("task not found"));
-        if(task.getAssignee().equals(user)){
-            task.setStatus(Status.valueOf(statusRequest.toUpperCase()));
-            taskRepository.save(task);
+            User user=((User) connectedUser.getPrincipal());
+            Task task=taskRepository.findById(idTask).orElseThrow(()->new TaskNotFound("task not found"));
+            if(task.getIdassignee().equals(user.getId())){
+                logger.info("ok");
+                task.setStatus(Status.valueOf(statusRequest.getStatus().trim().toUpperCase().replace(" ", "_")));
+                logger.info(task.getStatus().name());
+                taskRepository.save(task);
 
-        }
-
-
-
+            }
 
     }
 
@@ -202,5 +200,39 @@ public class TaskService {
                 tasks.isLast()
         );
 
+    }
+    public int getFinishedTasks(Authentication connectedUser, Status status) {
+        User user=((User) connectedUser.getPrincipal());
+         List<Task> list=taskRepository.findTasksByStatusFinished(user.getId(),Status.FINISHED);
+         return list.size();
+
+    }
+
+    public Integer getnbTasks(Authentication connectedUser) {
+        User user=((User) connectedUser.getPrincipal());
+       int s =taskRepository.findTasksByUserId(user.getId());
+        return s;
+    }
+
+    public PageResponse<TaskResponse> findTasksByCategory(int page, int size, Authentication connectedUser, String category) {
+
+        User user=((User) connectedUser.getPrincipal());
+        Pageable pageable= PageRequest.of(page, size, Sort.by("createdAt").descending());
+        Page<Task> tasks=taskRepository.findTasksByCategory(user.getId(),pageable, category);
+        if(!tasks.hasContent()){
+            throw new TaskNotFound("tasks not found having category "+category);
+        }
+        List<TaskResponse> taskResponse=tasks.stream()
+                .map(taskMapper::toTaskResponse)
+                .toList();
+        return new PageResponse<>(
+                taskResponse,
+                tasks.getNumber(),
+                tasks.getSize(),
+                tasks.getTotalElements(),
+                tasks.getTotalPages(),
+                tasks.isFirst(),
+                tasks.isLast()
+        );
     }
 }

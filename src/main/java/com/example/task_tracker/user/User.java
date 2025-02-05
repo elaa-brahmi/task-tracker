@@ -39,12 +39,13 @@ public class User implements UserDetails , Principal {
     private boolean accountLocked;
     @Enumerated(EnumType.STRING)
     private Role role;
-    @OneToMany(mappedBy="assignee", cascade=CascadeType.ALL, orphanRemoval=true,fetch=FetchType.LAZY)
+    //mappedBy="assignee",
+    @OneToMany(mappedBy="Idassignee", fetch=FetchType.EAGER)
     private List<Task> tasks;
-    // we can have private List<Role> roles;
-    //but in my application a user has only one role which user
-    @OneToMany(mappedBy="assignee", cascade=CascadeType.ALL, orphanRemoval=true,fetch=FetchType.LAZY)
+
+    @OneToMany(mappedBy="assignee", cascade=CascadeType.ALL, orphanRemoval=true,fetch=FetchType.EAGER)
     private List<Notification> notifs;
+
     @CreatedDate
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdDate;

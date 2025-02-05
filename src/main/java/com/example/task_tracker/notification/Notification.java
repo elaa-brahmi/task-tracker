@@ -1,26 +1,22 @@
 package com.example.task_tracker.notification;
 
 import com.example.task_tracker.task.Task;
-import com.example.task_tracker.user.User;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
-
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Data
+@ToString(exclude = "task")
 @Table(name="notification")
 @EntityListeners(AuditingEntityListener.class)
-
 public class Notification {
     @Id
     @GeneratedValue
@@ -28,16 +24,14 @@ public class Notification {
     @Column(nullable = false)
     private String message;
     @CreatedDate
+
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
+    private Integer assignee;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "assignee_id",nullable = false)
-    @JsonIgnore
-    private User assignee;
-
-    @OneToOne(optional = true)
-    @JoinColumn(name="task_id")
+    @OneToOne
+    @JoinColumn(name = "task_id")
+    @JsonBackReference
     @JsonIgnore
     private Task task;
 

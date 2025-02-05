@@ -4,9 +4,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -22,6 +20,15 @@ public class NotificationController {
     )
     {
         return ResponseEntity.ok( notificationService.getNotificationsByUserId(connectedUser));
+    }
+
+    @PutMapping("/{id}/read")
+    public ResponseEntity<Void> markRead(@PathVariable("id") Integer id
+
+                            , Authentication connectedUser) {
+        notificationService.markAsRead(id,connectedUser);
+        return ResponseEntity.ok().build();
+
     }
 
 }

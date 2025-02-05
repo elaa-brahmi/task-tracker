@@ -9,7 +9,9 @@ import io.swagger.v3.oas.annotations.info.License;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import io.swagger.v3.oas.annotations.servers.Server;
+import org.springframework.context.annotation.Configuration;
 
+@Configuration
 @OpenAPIDefinition(
         info=@Info(
                 contact=@Contact(
@@ -35,14 +37,12 @@ import io.swagger.v3.oas.annotations.servers.Server;
                         description = "prod env",
                         url="http://other-url"
 
-
                 )
 
         },
         security={
                 @SecurityRequirement( // for every controller or api we need a security requirement
                         name="bearerAuth"
-
                 )
         }
 )

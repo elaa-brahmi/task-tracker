@@ -11,5 +11,12 @@ public class UserMapper {
                 .lastName(request.getLastName())
                 .build();
     }
+    public UserResponse toUserResponse(User user) {
+        return UserResponse.builder()
+                .email(user.getEmail())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .build();
+    }
 
 }

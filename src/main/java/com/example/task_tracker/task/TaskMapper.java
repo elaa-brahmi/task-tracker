@@ -11,6 +11,7 @@ public class TaskMapper {
         return Task.builder()
                 .id(request.id())
                 .title(request.title())
+                .category(request.category())
                 .description(request.description())
                 .status(Status.valueOf((request.status())))
                 .dueDate(LocalDate.parse(request.dueDate()))
@@ -25,9 +26,10 @@ public class TaskMapper {
                 .id(task.getId())
                 .title(task.getTitle())
                 .description(task.getDescription())
+                .category(task.getCategory())
                 .status(task.getStatus())
                 .importance(task.getImportance())
-                .assignee(task.getAssignee().getfullName())
+                .assignee(task.getIdassignee())
                 .Duedate(task.getDueDate())
                 .build();
     }

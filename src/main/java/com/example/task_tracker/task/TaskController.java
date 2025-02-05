@@ -7,7 +7,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -76,6 +75,21 @@ public class TaskController {
 
     }
 
+    @GetMapping("/category/{category}")
+    public ResponseEntity<PageResponse<TaskResponse>> findTasksBycategory(
+            @RequestParam(name="page",defaultValue="0",required=false) int page,
+            @RequestParam(name="size",defaultValue="6",required=false) int size,
+            Authentication connectedUser,
+            @PathVariable("category") String category
+
+    ){
+        return ResponseEntity.ok(taskService.findTasksByCategory(page,size,connectedUser,category));
+
+    }
+
+
+
+
     @PutMapping("/{idTask}")
     public ResponseEntity<Void> updateTask(
             @PathVariable Integer idTask,
@@ -99,15 +113,15 @@ public class TaskController {
 
 }
 
-    @Transactional
-    @PatchMapping("/status/{idTask}")
+    //@Transactional
+    @PutMapping("/status/{idTask}")
     public ResponseEntity<Void> updateTaskStatus(
             @PathVariable("idTask") Integer idTask,
             Authentication connectedUser,
-            @RequestBody String statusRequest
+            @RequestBody TaskStatusRequest statusRequest
     ) throws UnauthorizedAccessException {
         Object principal = connectedUser.getPrincipal();
-        System.out.println("Principal class: " + principal.getClass());
+        System.out.println("Principal class: " + principal.getClass().getName());
        taskService.updateStatusOfATask(idTask,statusRequest,connectedUser);
        return ResponseEntity.ok().build();
     }
@@ -121,5 +135,21 @@ public class TaskController {
 
             ){
         return ResponseEntity.ok(taskService.searchByKeyword(page,size,connectedUser,keyword));
+    }
+
+
+
+    @GetMapping("/finished")
+    public ResponseEntity<Integer> nbTasksFinished(
+            Authentication connectedUser
+    ){
+        return ResponseEntity.ok(taskService.getFinishedTasks(connectedUser,Status.FINISHED));
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<Integer> nbTasks(
+            Authentication connectedUser
+    ){
+        return ResponseEntity.ok(taskService.getnbTasks(connectedUser));
     }
 }

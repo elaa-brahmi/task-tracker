@@ -1,8 +1,7 @@
 package com.example.task_tracker.task;
 
 import com.example.task_tracker.notification.Notification;
-import com.example.task_tracker.user.User;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -19,6 +18,7 @@ import java.time.LocalDateTime;
 @Entity
 @Data
 @EqualsAndHashCode
+@ToString(exclude = "notification")
 @Table(name="task")
 @EntityListeners(AuditingEntityListener.class)
 public class Task {
@@ -32,15 +32,10 @@ public class Task {
     private Status status;
     @Enumerated(EnumType.STRING)
     private Importance importance;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "assignee_id")
-    @JsonIgnore
-    private User assignee;
-
-    @OneToOne(optional = true,fetch = FetchType.LAZY)
-    @JoinColumn(name="notification_id")
-    @JsonIgnore
+    private String category;
+    private Integer Idassignee;
+    @OneToOne(mappedBy = "task", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
     private Notification notification;
 
     @CreatedDate

@@ -38,7 +38,7 @@ public class SecurityConfig {
                                         "/configuration/security",
                                         "/swagger-ui/**",
                                         "/webjars/**",
-                                        "/swagger-ui.html",
+                                        "/swagger-ui/index.html",
                                          "/ws/**"
                         )// allow these requests
                 .permitAll()
@@ -47,7 +47,7 @@ public class SecurityConfig {
                 )
                 .sessionManagement(session-> session.sessionCreationPolicy(STATELESS))
                 .authenticationProvider(authenticationProvider)
-                // CREATE our custom filter and exceute it  before proceeding to the UsernamePasswordAuthenticationFilter to check if the user exists ..or all the flow
+                // CREATE our custom filter and execute it  before proceeding to the UsernamePasswordAuthenticationFilter to check if the user exists ..or all the flow
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
 return http.build();

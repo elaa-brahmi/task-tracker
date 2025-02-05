@@ -44,7 +44,7 @@ public class JwtFilter extends OncePerRequestFilter {
                     // means that the user is not authenticated yet
                     UserDetails userDetails=this.userDetailsService.loadUserByUsername(userEmail);
                     if(jwtService.isTokenValid(jwt, userDetails)) {
-                        //validate token against my token
+                        //validate token against my user
                         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                                 userDetails,
                                 null,

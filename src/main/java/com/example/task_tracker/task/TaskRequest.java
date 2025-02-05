@@ -17,6 +17,9 @@ public record TaskRequest(
         @NotNull(message="103")
         @NotEmpty(message="103")
         String dueDate,
+        @NotNull(message="103")
+        @NotEmpty(message="103")
+        String category,
 
         Importance importance
 ) {

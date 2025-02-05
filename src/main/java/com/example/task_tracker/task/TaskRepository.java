@@ -13,16 +13,19 @@ public interface TaskRepository extends JpaRepository<Task, Integer> {
     @Query("""
             SELECT task 
             FROM Task task
-            WHERE task.assignee.id = :id
+            WHERE task.Idassignee = :id
+                
             """
 
     )
+
+
      Page<Task> findTasksByAssigneeId(Integer id, Pageable pageable);
     @Query("""
             SELECT task 
             FROM Task task
-            WHERE task.assignee.id = :id
-            AND task.status=:status
+            WHERE task.status=:status
+            AND task.Idassignee=:id
             """
 
     )
@@ -30,7 +33,7 @@ public interface TaskRepository extends JpaRepository<Task, Integer> {
     @Query("""
             SELECT task 
             FROM Task task
-            WHERE task.assignee.id = :id
+             WHERE task.Idassignee=:id        
             AND task.importance=:priority
             """
 
@@ -39,8 +42,7 @@ public interface TaskRepository extends JpaRepository<Task, Integer> {
     @Query("""
             SELECT task 
             FROM Task task
-            WHERE task.assignee.id = :id
-            AND task.dueDate=:parse
+            WHERE task.dueDate=:parse
             """
 
     )
@@ -48,7 +50,7 @@ public interface TaskRepository extends JpaRepository<Task, Integer> {
     @Query("""
             SELECT t 
             FROM Task t
-            WHERE t.assignee.id = :id
+                        WHERE t.Idassignee=:id
             AND (LOWER(t.title) LIKE %:keyword% OR LOWER(t.description) LIKE %:keyword%)
             """
 
@@ -56,4 +58,27 @@ public interface TaskRepository extends JpaRepository<Task, Integer> {
     Page<Task> SearchByKeyword(Integer id, Pageable pageable, String keyword);
 
     List<Task> findTasksByDueDateBetween(LocalDate dueDateAfter, LocalDate dueDateBefore);
+    @Query("""
+SELECT t
+FROM Task t
+WHERE t.Idassignee=:id
+AND t.status=:status
+""")
+    List<Task> findTasksByStatusFinished(Integer id, Status status);
+    @Query("""
+SELECT count(t)
+FROM Task t
+WHERE t.Idassignee=:id
+
+""")
+    Integer findTasksByUserId(Integer id);
+    @Query("""
+            SELECT task 
+            FROM Task task
+            WHERE task.category=:category
+                        AND task.Idassignee=:id
+            """
+
+    )
+    Page<Task> findTasksByCategory(Integer id, Pageable pageable, String category);
 }
