@@ -19,16 +19,12 @@ public class NotificationController {
             Authentication connectedUser
     )
     {
-        return ResponseEntity.ok( notificationService.getNotificationsByUserId(connectedUser));
+        return ResponseEntity.ok(notificationService.getNotificationsByUserId(connectedUser));
     }
-
     @PutMapping("/{id}/read")
-    public ResponseEntity<Void> markRead(@PathVariable("id") Integer id
-
-                            , Authentication connectedUser) {
+    public ResponseEntity<Void> markRead(@PathVariable("id") Integer id, Authentication connectedUser) {
         notificationService.markAsRead(id,connectedUser);
         return ResponseEntity.ok().build();
-
     }
 
 }

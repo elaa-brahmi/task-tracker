@@ -28,7 +28,6 @@ public class SchedulerConfig {
     private final TaskRepository taskRepository;
 //@Scheduled(fixedDelay = 3000)
 @Scheduled(cron = "0 33 19 * * *", zone = "Africa/Tunis")
-// Runs at 12:00 PM Tunisia time
     public void sendTaskReminders() {
         System.out.println("Sending reminders");
 

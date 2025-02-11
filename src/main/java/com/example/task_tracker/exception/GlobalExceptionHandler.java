@@ -1,6 +1,7 @@
 package com.example.task_tracker.exception;
 
 import jakarta.mail.MessagingException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
@@ -13,15 +14,15 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static com.example.task_tracker.exception.BusinessErrorCodes.*;
-import static org.ietf.jgss.GSSException.UNAUTHORIZED;
-import static org.springframework.http.HttpStatus.*;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler(LockedException.class)
     public ResponseEntity<ExceptionResponse> handleException(LockedException exp){
         return ResponseEntity
-                .status(UNAUTHORIZED)
+                .status(HttpStatus.UNAUTHORIZED)
                 .body(
                         ExceptionResponse.builder()
                                 .businessErrorCode(ACCOUNT_LOCKED.getCode())
@@ -35,7 +36,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(TaskNotFound.class)
     public ResponseEntity<ExceptionResponse> handleException(TaskNotFound exp){
         return ResponseEntity
-                .status(NOT_FOUND)
+                .status(HttpStatus.NOT_FOUND)
                 .body(
                         ExceptionResponse.builder()
                                 .businessErrorCode(Task_Not_Found.getCode())
@@ -45,16 +46,10 @@ public class GlobalExceptionHandler {
                 );
 
     }
-
-
-
-
-
-
     @ExceptionHandler(DisabledException.class)
     public ResponseEntity<ExceptionResponse> handleException(DisabledException exp){
         return ResponseEntity
-                .status(UNAUTHORIZED)
+                .status(HttpStatus.UNAUTHORIZED)
                 .body(
                         ExceptionResponse.builder()
                                 .businessErrorCode(ACCOUNT_DISABLED.getCode())
@@ -66,17 +61,16 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(BadCredentialsException.class)
-    public ResponseEntity<ExceptionResponse> handleException(BadCredentialsException exp){
+    public ResponseEntity<ExceptionResponse> handleException() {
         return ResponseEntity
-                .status(UNAUTHORIZED)
+                .status(HttpStatus.UNAUTHORIZED)
                 .body(
                         ExceptionResponse.builder()
                                 .businessErrorCode(BAD_CREDENTIALS.getCode())
                                 .businessErrorDescription(BAD_CREDENTIALS.getDescription())
-                                .error(exp.getMessage())
+                                .error("Login and / or Password is incorrect")
                                 .build()
                 );
-
     }
 
     @ExceptionHandler(MessagingException.class)
@@ -130,6 +124,20 @@ public class GlobalExceptionHandler {
                 .body(
                         ExceptionResponse.builder()
                                 .error(exp.getMessage())
+                                .build()
+                );
+
+    }
+
+    @ExceptionHandler(EmailUsed.class)
+    public ResponseEntity<ExceptionResponse> handleException(EmailUsed exp){
+        return ResponseEntity
+                .status(INTERNAL_SERVER_ERROR)
+                .body(
+                        ExceptionResponse.builder()
+                                .businessErrorCode(Email_USED.getCode())
+                                .businessErrorDescription(Email_USED.getDescription())
+                                .error("this email is already used")
                                 .build()
                 );
 

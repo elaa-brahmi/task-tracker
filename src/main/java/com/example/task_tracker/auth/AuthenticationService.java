@@ -2,12 +2,14 @@ package com.example.task_tracker.auth;
 
 import com.example.task_tracker.email.EmailService;
 import com.example.task_tracker.email.EmailTemplateName;
+import com.example.task_tracker.exception.EmailUsed;
 import com.example.task_tracker.security.JwtService;
 import com.example.task_tracker.user.*;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -31,7 +33,10 @@ public class AuthenticationService {
     @Value("${application.mailing.frontend.activation-url}")
     private String activationUrl;
 
-    public void register(RegistrationRequest request) throws MessagingException {
+    public void register(RegistrationRequest request) throws MessagingException , EmailUsed  {
+        if(userRepository.findByEmail(request.getEmail()) .isPresent()){
+            throw new EmailUsed("This email already exists");
+        }
 
         var user = User.builder()
                 .firstName(request.getFirstName())
@@ -103,7 +108,7 @@ public class AuthenticationService {
 
 
 
-    public AuthenticationResponse authenticate(AuthenticationRequest request) {
+    public AuthenticationResponse authenticate(AuthenticationRequest request) throws BadCredentialsException {
         var auth=authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getEmail(),

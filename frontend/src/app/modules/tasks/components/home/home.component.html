@@ -1,0 +1,71 @@
+<!--<nav class="navbar navbar-expand-lg bg-body-tertiary">-->
+<!--  <div class="container-fluid">-->
+<!--    <a class="navbar-brand" href=""-->
+<!--  </div>-->
+
+<!--</nav>-->
+
+<head>
+  <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
+</head>
+<body>
+<input type="checkbox" id="check">
+<label for="check">
+  <i class="fas fa-bars" id="btn"></i>
+  <i class="fas fa-times" id="cancel"></i>
+</label>
+<div class="sidebar">
+
+    <header>Menu </header><!--<i class="fas fa-bell fs-5 mt-4 me-1"></i>-->
+
+  <a href="#" class="active">
+    <i class="fas fa-qrcode"></i>
+    <span>Dashboard</span>
+  </a>
+  <a href="/src/app/modules/tasks/pages/todo-form/todo-form.component.html">
+    <i class="fas fa-link"></i>
+    <span>add a task</span>
+  </a>
+  <a href="#">
+    <i class="fas fa-stream"></i>
+    <span>Overview</span>
+  </a>
+  <a href="#">
+    <i class="fas fa-calendar"></i>
+    <span>Events</span>
+  </a>
+  <a href="#">
+    <i class="far fa-question-circle"></i>
+    <span>About</span>
+  </a>
+  <a href="#">
+    <button class="btn btn-link" type="button" (click)="logout()"><i class="fas fa-door-open fs-3"></i></button>
+    <span>log out</span>
+  </a>
+  <a href="#">
+    <i class="fas fa-person"></i>
+    <span>profile</span>
+  </a>
+</div>
+
+<!--<div class="frame">-->
+<!--  <div class="app-container" id="taskList">-->
+<!--    <h1 class="app-header">TO DO LIST</h1>-->
+<!--    <div class="add-task">-->
+<!--      <input type="text" autocomplete="off" placeholder="Add New Task" v-model="tasks.name" @keyup.enter="newItem" class="task-input">-->
+<!--      <input type="submit" value="" class="submit-task" @click="newItem" title="Add Task">-->
+<!--    </div>-->
+<!--    <ul class="task-list">-->
+<!--      <li class="task-list-item" v-for="task in tasks">-->
+<!--        <label class="task-list-item-label">-->
+<!--          <input type="checkbox">-->
+<!--          <span>{{task.name}}</span>-->
+<!--        </label>-->
+<!--        <span @click="delItem(task)" class="delete-btn" title="Delete Task">{{task.del}}</span>-->
+<!--      </li>-->
+<!--    </ul>-->
+<!--  </div>-->
+
+<!--</div>-->
+
+</body>

@@ -20,12 +20,12 @@ public class WebsocketConfig implements WebSocketMessageBrokerConfigurer {
     public void configureMessageBroker(MessageBrokerRegistry registry) {
         registry.enableSimpleBroker("/user");//Enables a simple message broker with the /user destination prefix for broadcasting messages (like notifications).
         registry.setApplicationDestinationPrefixes("/app");// Clients must use this prefix when sending messages.
+        registry.setUserDestinationPrefix("/user");
     }
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/ws")//Defines /ws as the WebSocket connection endpoint for clients to connect.
-
                 .setAllowedOrigins("http://localhost:4200")
                 .withSockJS();
     }

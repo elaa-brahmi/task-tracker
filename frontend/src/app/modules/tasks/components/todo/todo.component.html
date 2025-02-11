@@ -1,0 +1,21 @@
+<li class="list-group-item" [ngClass]="toggleClass()">
+    <div class="form-check d-inline">
+      <input type="checkbox" class="form-check-input" id="complete" (change)="onChange()" >
+      <label for="complete" class="form-check-label lead">{{task.description}}</label>
+  </div>
+  <div class="float-right">
+      <span class="mx-3">{{task.duedate}}</span>
+      <mat-form-field>
+        <mat-label>status</mat-label>
+        <mat-select [(ngModel)]="task.status" (selectionChange)="onChange()">
+          <mat-option *ngFor="let status of statusList" [value]="status">
+            {{status}}</mat-option>
+
+        </mat-select>
+      </mat-form-field>
+        <!--  <i class="fa fa-heart mx-3 btn" (click)='isImportant()'></i>
+   <button class="btn btn-danger btn-sm mx-3" (click)="onCliCk($event)">x</button> -->
+      <!-- <button class="btn btn-danger btn-sm mx-3" (click)="todoService.deleteTodo(todoInput)">x</button> -->
+      <button class="btn btn-danger btn-sm mx-3" (click)="deleteTodo()">x</button>
+  </div>
+</li>
