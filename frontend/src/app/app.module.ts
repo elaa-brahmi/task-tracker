@@ -14,6 +14,7 @@ import { RegisterComponent } from './pages/register/register.component';
 import { ActivateAccountComponent } from './pages/activate-account/activate-account.component';
 import {CodeInputModule} from "angular-code-input";
 import { HttpTokenInterceptor } from './services/interceptor/http-token.interceptor';
+import { ToastrModule } from 'ngx-toastr';
 @NgModule({
   declarations: [
     AppComponent,
@@ -25,7 +26,7 @@ import { HttpTokenInterceptor } from './services/interceptor/http-token.intercep
   imports: [
     MatDatepickerModule,
     MatNativeDateModule,
-
+    ToastrModule.forRoot(), // ToastrModule added
     MatFormFieldModule,
     ReactiveFormsModule,
     BrowserModule,

@@ -11,7 +11,6 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { TodoComponent } from './components/todo/todo.component';
 import {MatSelectModule} from '@angular/material/select';
 
-
 @NgModule({
   declarations: [
     MainPageComponent,
@@ -22,6 +21,7 @@ import {MatSelectModule} from '@angular/material/select';
   ],
   imports: [
     CommonModule,
+
     MatSelectModule,
     FormsModule,
     TasksRoutingModule,
