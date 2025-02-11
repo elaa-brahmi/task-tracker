@@ -9,10 +9,7 @@ const routes: Routes = [
     path:'',
     component:MainPageComponent,
    children:[
-     {
-     path:'',
-    component:TaskListComponent
-     },
+
      {
       path:'todo-form',
       component:TodoFormComponent

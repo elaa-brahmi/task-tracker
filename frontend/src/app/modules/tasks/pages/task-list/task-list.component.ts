@@ -19,10 +19,11 @@ export class TaskListComponent implements OnInit{
   }
   ngOnInit(): void {
     console.log('TaskListComponent initialized');
-
     this.getTaskList();
-
-
+  }
+  onDeleteTask(id:number):void{
+    this.taskResponse.content = this.taskResponse.content?.filter(task=>task.id!==id);
+    this.router.navigate(['/tasks']);
   }
   goToFirstPage(){
     this.page=0;

@@ -1,7 +1,11 @@
-<li class="list-group-item" [ngClass]="toggleClass()">
+<div *ngIf="message" class="message">
+  {{ message }}
+</div>
+
+<li class="list-group-item" [ngClass]="toggleClass()" >
     <div class="form-check d-inline">
-      <input type="checkbox" class="form-check-input" id="complete" (change)="onChange()" >
-      <label for="complete" class="form-check-label lead">{{task.description}}</label>
+      <input type="checkbox" class="form-check-input" id="complete" (change)="onChangeFinished()" >
+      <label for="complete" class="form-check-label lead text-start">{{task.description}}</label>
   </div>
   <div class="float-right">
       <span class="mx-3">{{task.duedate}}</span>
