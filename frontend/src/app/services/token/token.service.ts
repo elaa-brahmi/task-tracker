@@ -1,32 +1,39 @@
 import { Injectable } from '@angular/core';
-
+import {JwtHelperService} from '@auth0/angular-jwt';
 @Injectable({
   providedIn: 'root'
 })
 export class TokenService {
-  private _token:string | null = null;
-  get token(): string | null {
-    return this._token;
+  set token(token: string) {
+    localStorage.setItem('token', token);
   }
 
-  set token(value: string | null) {
-    this._token = value;
-    if (value) {
-      localStorage.setItem('token', value);
-    } else {
-      localStorage.removeItem('token');
+  get token() {
+    return localStorage.getItem('token') as string;
+  }
+
+  isTokenValid() {
+    const token = this.token;
+    if (!token) {
+      return false;
     }
+    // decode the token
+    const jwtHelper = new JwtHelperService();
+    // check expiry date
+    const isTokenExpired = jwtHelper.isTokenExpired(token);
+    if (isTokenExpired) {
+      this.clearToken();
+      return false;
+    }
+    return true;
   }
 
-  loadToken(): void {
-    this._token = localStorage.getItem('token');
+  isTokenNotValid() {
+    return !this.isTokenValid();
   }
-
   clearToken(): void {
-    this._token = null;
     localStorage.removeItem('token');
   }
-
 
   /* set token(token:string){
     localStorage.setItem('token',token);
