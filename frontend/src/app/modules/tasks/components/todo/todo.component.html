@@ -1,8 +1,5 @@
-<div *ngIf="message" class="message">
-  {{ message }}
-</div>
 
-<li class="list-group-item" [ngClass]="toggleClass()" >
+<li class="list-group-item" [ngClass]="toggleClass()" [ngClass]="{'finished-task':task.status==='FINISHED'}" >
     <div class="form-check d-inline">
       <input type="checkbox" class="form-check-input" id="complete" (change)="onChangeFinished()" >
       <label for="complete" class="form-check-label lead text-start">{{task.description}}</label>

@@ -1,0 +1,23 @@
+<div #panel class="panel">
+  <div class="header" style="background-color: #A890FE;">
+    <div #menuIcon class="menu-icon" (click)="toggleMenu()">
+      <div #dashTop class="dash-top"></div>
+      <div class="dash-bottom"></div>
+      <div #circle1 class="circle"></div>
+    </div>
+    <h2 class="title text-center">Notifications</h2>
+  </div>
+
+  <div class="notifications ps-2">
+    <div *ngFor="let notif of notifResponse" class="notification">
+      <p><b>{{ notif.createdAt }}</b>:<br> {{ notif.message }}</p>{{ notif.status }}
+      <div class="d-flex justify-content-center">
+        <button class="btn btn-primary" (click)="markAsread(notif.id)" style="background-color: #A890FE;">mark as read</button>
+      </div>
+      <hr style="width: 50%; margin: 10px auto;">
+
+    </div>
+  </div>
+</div>
+
+

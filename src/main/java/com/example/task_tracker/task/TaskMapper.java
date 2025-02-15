@@ -8,13 +8,17 @@ import java.time.LocalDate;
 
 public class TaskMapper {
     public Task toTask(TaskRequest request) {
+        String dateOnly = request.dueDate().substring(0, 10);
+
+        // Parse as LocalDate
+        LocalDate localDate = LocalDate.parse(dateOnly);
         return Task.builder()
                 .id(request.id())
                 .title(request.title())
                 .category(request.category())
                 .description(request.description())
                 .status(Status.valueOf((request.status())))
-                .dueDate(LocalDate.parse(request.dueDate()))
+                .dueDate(localDate)
                 .importance(request.importance())
                 .build();
     }

@@ -4,7 +4,7 @@
 
 export interface NotificationResponse {
   createdAt: string;
-  id?: number;
+  id: number;
   message: string;
   status?: 'READ' | 'UNREAD';
 }

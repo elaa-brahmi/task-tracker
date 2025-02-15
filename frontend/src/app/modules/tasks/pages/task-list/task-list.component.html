@@ -1,90 +1,68 @@
-<div class="container-fluid">
-<div class="card shadow" *ngIf="viewList">
-  <h5 class="card-header">My Todo List</h5>
-  <div class="card-body">
+<div class=" ms-5 d-flex justify-content-between  gap-4" >
+ <div class="container-fluid example-container"  >
+  <mat-form-field style="width:265px" >
+    <mat-label>Enter some input</mat-label>
+    <input matInput #input minlength="3" placeholder="to do ..." (input)="onInput(input.value)" />
+  </mat-form-field>
+
+  <mat-form-field style="width:250px" >
+    <mat-label>Filter by</mat-label>
+    <mat-select (selectionChange)="onFilterChange($event)" [(ngModel)]="selectedFilter">
+      <mat-option *ngFor="let filter of filters" [value]="filter">{{ filter }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+<div style="width:530px" >
+  <div class="card shadow" *ngIf="viewList && taskResponse.content && taskResponse.content.length > 0">
+    <h5 class="card-header">My Todo List</h5>
+    <div class="card-body">
       <ul class="list-group" *ngFor="let task of taskResponse.content">
-          <app-todo [task]="task" (taskDeleted)="onDeleteTask($event)" ></app-todo>
-
+        <app-todo [task]="task" (taskDeleted)="onDeleteTask($event)" (taskStatusChanged)="updateProgress()"></app-todo>
       </ul>
+    </div>
+    <div class="d-flex justify-content-center mt-3">
+      <nav aria-label="page navigation example">
+        <ul class="pagination">
+          <li class="page-item">
+            <a (click)="goToFirstPage()" class="page-link" href="javascript:void(0)" [class.disabled]="page == 0">
+              <i class="fa-solid fa-angles-left"></i>
+            </a>
+          </li>
+          <li class="page-item">
+            <a (click)="goToPreviousPage()" class="page-link" href="javascript:void(0)" [class.disabled]="page == 0">
+              <i class="fa-solid fa-angle-left"></i>
+            </a>
+          </li>
+          <li class="page-item" *ngFor="let _ of [].constructor(taskResponse?.totalPages || 0); let i = index">
+            <a (click)="goToPage(i)" class="page-link" href="javascript:void(0)" [class.active]="page == i">
+              {{ i + 1 }}
+            </a>
+          </li>
+          <li class="page-item">
+            <a (click)="goToNextPage()" class="page-link" href="javascript:void(0)"
+              [class.disabled]="page == (taskResponse?.totalPages || 0) - 1">
+              <i class="fa-solid fa-chevron-right"></i>
+            </a>
+          </li>
+          <li class="page-item">
+            <a (click)="goToLastPage()" class="page-link" href="javascript:void(0)"
+              [class.disabled]="page == (taskResponse?.totalPages || 0) - 1">
+              <i class="fa-solid fa-angles-right"></i>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
   </div>
-  <div class="d-flex justify-content-center mt-3">
-    <nav aria-label="page navigation example">
-      <ul class="pagination">
-        <li class="page-item">
-          <!--disable the href-->
-          <a (click)="goToFirstPage()"
-            class="page-link"
-            href="javascript:void(0)"
-            aria-label="previous"
-            [class.disabled]="page == 0">
-           >
-           <i class="fa-solid fa-angles-left"></i>
-          </a>
-        </li>
-        <li class="page-item">
-          <!--disable the href-->
-          <a (click)="goToPreviousPage()"
-           class="page-link"
-           href="javascript:void(0)"
-           aria-label="previous"
-           [class.disabled]="page == 0">
-           <i class="fa-solid fa-angle-left"></i>
-          </a>
-        </li>
-        <!--loop over the different pages-->
-        <li class="page-item"
-        *ngFor="let _ of [].constructor(this.taskResponse?.totalPages || 0); let i = index"
-        >
-          <a (click)="goToPage(i)"
-           class="page-link"
-           href="javascript:void(0)"
-           aria-label="previous"
-           [class.active]="page == i">
-        {{ i+1 }}
-          </a>
-
-        </li>
-
-
-
-        <li class="page-item">
-          <!--disable the href-->
-          <a (click)="goToNextPage()"
-            class="page-link"
-            href="javascript:void(0)"
-            aria-label="next"
-            [class.disabled]="page == (taskResponse?.totalPages || 0) - 1"
-           >
-           <i class="fa-solid fa-chevron-right"></i>
-          </a>
-        </li>
-
-        <li class="page-item">
-          <!--disable the href-->
-          <a (click)="goToLastPage()"
-           class="page-link"
-           href="javascript:void(0)"
-           aria-label="previous"
-           [class.disabled]="page == (taskResponse?.totalPages || 0) - 1">
-           <i class="fa-solid fa-angles-right"></i>
-          </a>
-        </li>
-
-      </ul>
-    </nav>
-
   </div>
 </div>
-
- <div class="card shadow" *ngIf="!viewList">
-  <h5 class="card-header">My Todo List</h5>
-  <div class="card-body">
-    <p>you have no tasks</p>
-      <!-- <ul class="list-group" *ngFor="let todo of todoService.fav">
-
-          <app-todo  [task]="task" [todoInput]="todo"></app-todo>
-
-      </ul> -->
+  <div class="d-flex flex-column align-items-center gap-1"><p><mat-icon aria-hidden="false" class="text-center" aria-label="Example home icon" fontIcon="trending_up" ></mat-icon><br>progress bar for finished tasks<br></p>
+    <mat-progress-bar mode="determinate" [value]="progress"></mat-progress-bar></div>
+</div>
+  <div class="card shadow container-fluid"  style="width:530px; margin-right:266px;" *ngIf="!viewList || !taskResponse.content || taskResponse.content.length === 0">
+    <h5 class="card-header">My Todo List</h5>
+    <div class="card-body">
+      <p>You have no tasks</p>
+    </div>
   </div>
-</div>
-</div>
+

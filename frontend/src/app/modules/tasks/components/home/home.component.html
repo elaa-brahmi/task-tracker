@@ -1,15 +1,13 @@
-<!--<nav class="navbar navbar-expand-lg bg-body-tertiary">-->
-<!--  <div class="container-fluid">-->
-<!--    <a class="navbar-brand" href=""-->
-<!--  </div>-->
 
-<!--</nav>-->
 
 <head>
   <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
 </head>
 <body>
-  <app-task-list class="divTaskList mt-4"></app-task-list>
+  <app-task-list class="divTaskList mt-4" *ngIf="list && !profile && !addTask"></app-task-list>
+  <app-todo-form *ngIf="!list && !profile && addTask" ></app-todo-form>
+  <app-profile *ngIf="!list && profile && !addTask" ></app-profile>
+  <app-notif  *ngIf="!list && !profile && !addTask && notif"></app-notif>
 <input type="checkbox" id="check">
 <label for="check">
   <i class="fas fa-bars" id="btn"></i>
@@ -17,33 +15,27 @@
 </label>
 <div class="sidebar">
 
-    <header>Menu </header><!--<i class="fas fa-bell fs-5 mt-4 me-1"></i>-->
+    <header>Menu </header>
 
-  <a href="#" class="active">
+
+  <a routerLink="/task-list" class="active" (click)="list=true;profile=false;addTask=false">
     <i class="fas fa-qrcode"></i>
-    <span>Dashboard</span>
+    <span>view tasks</span>
   </a>
-  <a href="/src/app/modules/tasks/pages/todo-form/todo-form.component.html">
-    <i class="fas fa-link"></i>
+  <a routerLink="/todo-form" (click)="list=false;profile=false;addTask=true">
+    <i class="fas fa-plus"></i>
     <span>add a task</span>
   </a>
-  <a href="#">
-    <i class="fas fa-stream"></i>
-    <span>Overview</span>
+  <a routerLink="/notif" (click)="list=false;profile=false;addTask=false ;notif=true">
+    <i class="fas fa-bell" ></i>
+    <span>notifications</span>
   </a>
-  <a href="#">
-    <i class="fas fa-calendar"></i>
-    <span>Events</span>
-  </a>
-  <a href="#">
-    <i class="far fa-question-circle"></i>
-    <span>About</span>
-  </a>
-  <a href="#">
+
+  <a routerLink="/login">
     <button class="btn btn-link" type="button" (click)="logout()"><i class="fas fa-door-open fs-3"></i></button>
     <span>log out</span>
   </a>
-  <a href="#">
+  <a routerLink="/profile" (click)="list=false;profile=true;addTask=false" >
     <i class="fas fa-person"></i>
     <span>profile</span>
   </a>

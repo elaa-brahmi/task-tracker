@@ -2,21 +2,21 @@
   <div class="activate-message" *ngIf="isOkay else activationError">
     <h2>Activation successful </h2>
     <p>your account has been activated successfully </p>
-    <button class="btn btn-primary" (click)="redirectToLogin()">go to login</button>
+    <button class="mt-2 text-light" (click)="redirectToLogin()" style="background-color: #A890FE;">go to login</button>
   </div>
 
   <ng-template #activationError>
     <div class="activate-error">
       <h2>Activation failed </h2>
       <p>{{ message }} </p>
-      <button class="btn btn-primary" (click)="submitted=false">try again</button>
+      <button class="mt-2"  (click)="submitted=false" style="background-color: #A890FE;">try again</button>
     </div>
 
   </ng-template>
 </div>
-<ng-template #codeForm>
-  <div class="container">
-    <div class="text-center" style="width:400px;">
+<ng-template #codeForm >
+  <div class="container mt-5">
+    <div class="text-center"  style="width:400px;">
       <h2>Type your activation code </h2>
       <code-input [isCodeHidden]="false"
                   [codeLength]="6"

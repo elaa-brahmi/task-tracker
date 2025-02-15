@@ -29,7 +29,7 @@ export class LoginComponent {
         console.log('authentification success');
         // todo save the token
         this.tokenService.token=res.token as string;
-        this.router.navigate(['tasks']);
+        this.router.navigate(['task-management']);
       },
       error:(err):void=>{
         console.log('error authentification');

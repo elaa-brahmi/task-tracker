@@ -27,7 +27,7 @@ public class SchedulerConfig {
     private final NotificationService notificationService;
     private final TaskRepository taskRepository;
 //@Scheduled(fixedDelay = 3000)
-@Scheduled(cron = "0 33 19 * * *", zone = "Africa/Tunis")
+@Scheduled(cron = "0 53 21 * * *", zone = "Africa/Tunis")
     public void sendTaskReminders() {
         System.out.println("Sending reminders");
 

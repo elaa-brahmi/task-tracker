@@ -14,7 +14,9 @@ import { RegisterComponent } from './pages/register/register.component';
 import { ActivateAccountComponent } from './pages/activate-account/activate-account.component';
 import {CodeInputModule} from "angular-code-input";
 import { HttpTokenInterceptor } from './services/interceptor/http-token.interceptor';
+import { TasksModule } from './modules/tasks/tasks.module';
 import { ToastrModule } from 'ngx-toastr';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
 @NgModule({
   declarations: [
     AppComponent,
@@ -26,14 +28,17 @@ import { ToastrModule } from 'ngx-toastr';
   imports: [
     MatDatepickerModule,
     MatNativeDateModule,
-    ToastrModule.forRoot(), // ToastrModule added
+    ToastrModule.forRoot(),
+     // ToastrModule added
     MatFormFieldModule,
+    MatProgressBarModule,
     ReactiveFormsModule,
     BrowserModule,
     HttpClientModule, // super important
     AppRoutingModule,
     BrowserAnimationsModule,
     FormsModule,
+    TasksModule,
     CodeInputModule
   ],
   providers:[

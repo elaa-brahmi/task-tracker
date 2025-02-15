@@ -13,18 +13,41 @@ import { ToastrService } from 'ngx-toastr';
 export class TodoComponent implements OnInit {
   @Input() task: TaskResponse={}; //a task has attributes
   @Output() taskDeleted=new EventEmitter<number>();
+  @Output() taskUpdated=new EventEmitter<number>();
+
+@Output() taskStatusChanged=new EventEmitter<TaskStatusRequest>();
   completed:boolean=false;
-   statusList:string[] = ['PENDING','IN_PROGRESS'];
-   selectedValue:string='';
-   message:string='';
+  statusList:string[] = ['PENDING','IN_PROGRESS','FINISHED'];
+  selectedValue:string='';
+  message:string='';
 
   constructor( public TaskService:TaskService,public router:Router,
     private toastr: ToastrService
   ) { }
 
   ngOnInit(): void {
+    console.log('Task received in app-todo:', this.task);
     this.selectedValue = this.task.status as string;
   }
+  deleteTodo(){
+    const params = {
+      idTask: this.task.id as number
+    }
+    this.TaskService.deleteTask(params).subscribe({
+      next:()=>{
+        console.log('Task deleted');
+        this.toastr.error(`Todo ${this.task.id} Deleted!`, 'Deleted Successfuly');
+        this.taskDeleted.emit(this.task.id as number);// Emit an event when the task is deleted
+
+      },
+      error:(error) => {
+        this.toastr.error('Error deleting task');
+        console.error('Error deleting task:', error);
+      }
+  });
+  }
+
+
 
   onChange():void{
     const params={
@@ -35,8 +58,10 @@ export class TodoComponent implements OnInit {
     };
     this.TaskService.updateTaskStatus$Response(params).subscribe({
       next:()=>{
+        this.taskStatusChanged.emit();
+
         console.log('Task status updated to ', this.task.status);
-        this.toastr.success('Task status updated to '+ this.task.status);
+        this.toastr.success(`Task status updated to ${this.task.status}`,'Updated Successfuly');
 
       },
       error:(error) => {
@@ -47,7 +72,6 @@ export class TodoComponent implements OnInit {
     });
   }
   onChangeFinished(){
-
     const params={
       idTask: this.task.id as number,
       body: {
@@ -56,50 +80,36 @@ export class TodoComponent implements OnInit {
     };
     this.TaskService.updateTaskStatus$Response(params).subscribe({
       next:()=>{
+        this.taskStatusChanged.emit();
+          console.log('Task status updated to finished','FINISHED');
+          this.toastr.success('Task status updated to finished');
 
-          console.log('Task status updated to finished');
 
-          this.TaskService.deleteTask$Response({idTask: this.task.id as number}).subscribe({
-            next:()=>{
-              this.toastr.success('Task is finished');
-              this.taskDeleted.emit(this.task.id as number);// Emit an event when the task is deleted
-              console.log('Task deleted');
-
-            },
-            error:(error) => {
-              console.error('Error deleting task:', error);
+          setTimeout(() => {
+            if(confirm(' this task is finished . Do you want to delete this task?')){
+              this.TaskService.deleteTask$Response({idTask: this.task.id as number}).subscribe({
+                next:()=>{
+                  this.toastr.error('Task is deleted','Deleted Successfuly');
+                  this.taskDeleted.emit(this.task.id as number);// Emit an event when the task is deleted
+                  console.log('Task deleted');
+                },
+                error:(error) => {
+                  console.error('Error deleting task:', error);
+                }
+              });
             }
-          });
-        }
-      });
-
-
-
-
-  }
-  toggleClass(){
-    return {
-      'list-group-item-success': this.task.status === 'FINISHED',
-      'border-primary': this.task.status === 'IN_PROGRESS'
-    };
-  }
-  deleteTodo(){
-    const params = {
-      idTask: this.task.id as number
-    }
-    this.TaskService.deleteTask(params).subscribe({
-      next:()=>{
-        console.log('Task deleted');
-        this.toastr.success('Task deleted');
-        this.taskDeleted.emit(this.task.id as number);// Emit an event when the task is deleted
-        this.router.navigate(['/tasks']);
+        },1000);
       },
       error:(error) => {
-        this.toastr.error('Error deleting task');
-        console.error('Error deleting task:', error);
-      }
-  });
+        console.error('Error updating task status:', error);
+        this.toastr.error('Error updating task status');}
+      });
   }
+  toggleClass(){
+      return { 'list-group-item-success': this.task.status === 'FINISHED',
+         'border-primary': this.task.status === 'FINISHED' };
+  }
+
 
 
 

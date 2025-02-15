@@ -8,6 +8,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -33,13 +34,15 @@ public class NotificationService {
 
     }
     public List<NotificationResponse> getNotificationsByUserId(Authentication connectedUser) {
+
         User user=((User)connectedUser.getPrincipal());
         List<Notification> list=notificationRepository.getNotificationsByAssigneeId(user.getId());
+
         return list.stream()
                 .map(notification -> NotificationResponse.builder()
                         .id(notification.getId())
                         .message(notification.getMessage())
-                        .createdAt(notification.getCreatedAt())
+                        .createdAt(LocalDate.parse(notification.getCreatedAt().toString().substring(0, 10)))
                         .status(notification.getReadStatus())
                         .build()
                 ).collect(Collectors.toList());
